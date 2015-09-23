@@ -128,7 +128,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CategoriasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProdutoesController.cs" />
+    <Compile Include="Controllers\TpTransacaosController.cs" />
+    <Compile Include="Db\KitContext.cs" />
+    <Compile Include="Db\KitInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -175,6 +180,21 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Categorias\Create.cshtml" />
+    <Content Include="Views\Categorias\Delete.cshtml" />
+    <Content Include="Views\Categorias\Details.cshtml" />
+    <Content Include="Views\Categorias\Edit.cshtml" />
+    <Content Include="Views\Categorias\Index.cshtml" />
+    <Content Include="Views\TpTransacaos\Create.cshtml" />
+    <Content Include="Views\TpTransacaos\Delete.cshtml" />
+    <Content Include="Views\TpTransacaos\Details.cshtml" />
+    <Content Include="Views\TpTransacaos\Edit.cshtml" />
+    <Content Include="Views\TpTransacaos\Index.cshtml" />
+    <Content Include="Views\Produtoes\Create.cshtml" />
+    <Content Include="Views\Produtoes\Delete.cshtml" />
+    <Content Include="Views\Produtoes\Details.cshtml" />
+    <Content Include="Views\Produtoes\Edit.cshtml" />
+    <Content Include="Views\Produtoes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

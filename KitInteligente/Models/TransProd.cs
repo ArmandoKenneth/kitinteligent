@@ -13,10 +13,10 @@ namespace KitInteligente.Models
 
         // Foreign keys
         public int ProdutoID { get; set; }
-        public int TransacaoID { get; set; }
+        //public int TransacaoID { get; set; }
 
         // Virtual objects
         public virtual Produto Produto { get; set; }
-        public virtual Transacao Transacao { get; set; }
+        //public virtual Transacao Transacao { get; set; }
     }
 }

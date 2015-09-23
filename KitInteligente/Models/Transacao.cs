@@ -16,9 +16,11 @@ namespace KitInteligente.Models
         // Foreign keys
         // public int UsuarioID { get; set; }
         public int TpTransacaoID { get; set; }
+        public int TransPodID { get; set; }
 
         // Virtual objects
         // public virtual Usuario Usuario { get; set; }
         public virtual TpTransacao TpTransacao { get; set; }
+        public virtual TransProd TransProd { get; set; }
     }
 }

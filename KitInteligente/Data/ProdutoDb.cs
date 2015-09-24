@@ -153,6 +153,18 @@ namespace KitInteligente.Data
             }
         }
 
+        public ICollection<Produto> obterProdutos(string stringPesquisa)
+        {
+            try
+            {
+                return context.Produtos.Include(p => p.CalcEstoqueSeg).Include(p => p.Categoria).Where(s => s.Descricao.StartsWith(stringPesquisa)).ToList<Produto>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
        
     }
 }

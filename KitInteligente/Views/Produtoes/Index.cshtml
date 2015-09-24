@@ -1,52 +1,60 @@
-﻿@model IEnumerable<KitInteligente.Models.Produto>
+﻿@model PagedList.IPagedList<KitInteligente.Models.Produto>
+@using PagedList.Mvc;
+
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Produtos";
 }
 
-<h2>Index</h2>
+<h2>Produtos</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm("Index", "Produtoes", FormMethod.Get))
+{ 
+    <p> Pesquisa: @Html.TextBox("StringPesquisa", ViewBag.FiltroAtual as string) <input type="submit" value="Search" /></p> 
+}
+
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CalcEstoqueSeg.CalcEstoqueSegID)
+            @Html.DisplayNameFor(model => model.First().Codigo)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Categoria.Descricao)
+            @Html.DisplayNameFor(model => model.First().Descricao)
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.Codigo)
+            @Html.DisplayNameFor(model => model.First().Categoria.Descricao)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Descricao)
-        </th>
-        
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CalcEstoqueSeg.CalcEstoqueSegID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categoria.Descricao)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Codigo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descricao)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProdutoID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProdutoID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProdutoID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.Descricao)
+            </td>
+            
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ProdutoID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ProdutoID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ProdutoID })
+            </td>
+        </tr>
+    }
 
 </table>
+
+<br /> Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, pagina => Url.Action("Index", new { pagina, filtroAtual = ViewBag.FiltroAtual }))

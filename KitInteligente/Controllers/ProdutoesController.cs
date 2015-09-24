@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using KitInteligente.Db;
 using KitInteligente.Models;
 using KitInteligente.Data;
+using PagedList;
 
 namespace KitInteligente.Controllers
 {
@@ -16,12 +17,35 @@ namespace KitInteligente.Controllers
     {
         private ProdutoDb produtoDb = new ProdutoDb();
         private CategoriaDb categoriaDb = new CategoriaDb();
+        private ICollection<Produto> produtos = new List<Produto>();
 
         // GET: Produtoes
-        public ActionResult Index()
+        public ActionResult Index(string stringPesquisa, string filtroAtual, int? pagina)
         {
-            var produtos = produtoDb.obterTodosProdutos();
-            return View(produtos);
+            if (stringPesquisa != null)
+            {
+                pagina = 1;
+            }
+            else
+            {
+                stringPesquisa = filtroAtual;
+            }
+
+            ViewBag.FiltroAtual = stringPesquisa;
+
+            ICollection<Produto> produtos;
+            if (!String.IsNullOrEmpty(stringPesquisa))
+            {
+                produtos = produtoDb.obterProdutos(stringPesquisa);
+            }
+            else
+            {
+                produtos = produtoDb.obterTodosProdutos();
+            }
+            //return View(produtos);
+            int pageSize = 3;
+            int pageNumber = (pagina ?? 1);
+            return View(produtos.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Produtoes/Details/5

@@ -9,7 +9,6 @@
 
     function deletar() {
         $("#idSelec").val(idSelecionado);
-        $("#permitirExclusao").val(true);
         $("#formularioPost").submit();
     }
 
@@ -21,14 +20,13 @@
 
 </script>
 <p>
-    @Html.ActionLink("Create ();", "Create")
+    @Html.ActionLink("Create", "Create")
 </p>
 
 @using (Html.BeginForm("Delete", "Categorias", FormMethod.Post, new { id = "formularioPost"}))
 {
     @Html.AntiForgeryToken()
     <input type="hidden" name="id" id="idSelec" />
-    <input type="hidden" name="permitirExclusao" id="permitirExclusao" />
 }
 
 <table class="table">

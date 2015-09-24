@@ -5,10 +5,32 @@
 }
 
 <h2>Index</h2>
+<script>
 
+    function deletar() {
+        $("#idSelec").val(idSelecionado);
+        $("#permitirExclusao").val(true);
+        $("#formularioPost").submit();
+    }
+
+    var idSelecionado;
+    function confirmarExclusao(id) {
+        idSelecionado = id;
+        $('#modalConfirmacao').modal('show');
+    }
+
+</script>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create ();", "Create")
 </p>
+
+@using (Html.BeginForm("Delete", "Categorias", FormMethod.Post, new { id = "formularioPost"}))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="idSelec" />
+    <input type="hidden" name="permitirExclusao" id="permitirExclusao" />
+}
+
 <table class="table">
     <tr>
         <th>
@@ -23,11 +45,23 @@
             @Html.DisplayFor(modelItem => item.Descricao)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CategoriaID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CategoriaID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CategoriaID })
+            @Html.ActionLink("Edit", "Edit", new { id = item.CategoriaID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.CategoriaID }) |
+            <a href="javascript:confirmarExclusao(@item.CategoriaID)">Remover</a>
+            @*<span class="item-delete-button">
+                <button class="btn btn-danger col-lg-3 col-lg-offset-3" data-toggle="modal" data-target="#@item.CategoriaID" onclick="deleteStart(this)">
+                    Delete
+                </button>
+            </span>*@
+            
         </td>
     </tr>
 }
 
 </table>
+
+@{
+    Html.RenderPartial("_ConfirmarExclusao");
+}
+
+

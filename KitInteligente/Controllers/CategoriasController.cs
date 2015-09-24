@@ -20,7 +20,19 @@ namespace KitInteligente.Controllers
         // GET: Categorias
         public ActionResult Index()
         {
-            return View(categoriaDb.obterTodasCategorias());
+            var categorias = categoriaDb.obterTodasCategorias();
+            foreach (Categoria c in categorias)
+            {
+                if (c.Produtos != null && c.Produtos.Count > 0)
+                {
+                    c.PermitirExclusao = false;
+                }
+                else
+                {
+                    c.PermitirExclusao = true;
+                }
+            }
+            return View(categorias);
         }
 
         // GET: Categorias/Details/5
@@ -98,12 +110,7 @@ namespace KitInteligente.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Categoria categoria = categoriaDb.obterCategoria(id);
-            categoria.PermitirExclusao = true;
-            if (categoria.Produtos != null && categoria.Produtos.Count > 0)
-            {
-                categoria.PermitirExclusao = false;
-            }
-            ViewBag.permitirExclusao = categoria.PermitirExclusao;
+            ViewBag.permitirExclusao = permitirExclusao(id);
             if (categoria == null)
             {
                 return HttpNotFound();
@@ -114,13 +121,23 @@ namespace KitInteligente.Controllers
         // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id, bool permitirExclusao)
+        public ActionResult DeleteConfirmed(int id)
         {
-            if (permitirExclusao)
+            if (permitirExclusao(id))
             {
                 categoriaDb.removerCategoria(id);
             }
             return RedirectToAction("Index");
+        }
+        
+        private bool permitirExclusao(int? id)
+        {
+            Categoria categoria = categoriaDb.obterCategoria(id);
+            if (categoria.Produtos != null && categoria.Produtos.Count > 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         protected override void Dispose(bool disposing)
@@ -130,6 +147,11 @@ namespace KitInteligente.Controllers
                 categoriaDb.dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult ConfirmarExclusao()
+        {
+            return PartialView();
         }
     }
 }

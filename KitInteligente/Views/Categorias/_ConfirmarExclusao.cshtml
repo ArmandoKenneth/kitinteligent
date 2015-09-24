@@ -1,0 +1,22 @@
+﻿@*@model KitInteligente.Models.Categoria*@
+<script>
+
+
+</script>
+<div class="modal fade" id="modalConfirmacao" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="deleteLabel">Remover categoria</h4>
+            </div>
+            <div class="modal-body" id="preview">
+                <p>Carregando...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="deletar()" id="confirmarExclusao">Remover categoria</button>
+
+            </div>
+        </div>
+    </div>
+</div>

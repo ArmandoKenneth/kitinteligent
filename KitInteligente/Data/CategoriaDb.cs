@@ -17,7 +17,7 @@ namespace KitInteligente.Data
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
             return null;
         }

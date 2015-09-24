@@ -12,7 +12,7 @@ namespace KitInteligente.Models
 
         public int CategoriaID { get; set; }
 
-        [Display(Name = "Código")]
+        [Display(Name = "Descricao")]
         [Required(ErrorMessage = "Campo obrigatorio")]
         public string Descricao { get; set; }
 

@@ -23,9 +23,22 @@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.PermitirExclusao)
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+             @{
+                 if (ViewBag.permitirExclusao)
+                 {
+                    <input type="submit" value="Delete" class="btn btn-default" />
+                 }
+                 else
+                 {
+                    <input type="submit" value="Delete" class="btn btn-default" disabled="disabled" 
+                           title="Existem produtos associados a esta categoria"
+                           alt="Existem produtos associados a esta categoria" />
+                 }
+            }          
+             |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

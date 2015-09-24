@@ -132,6 +132,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProdutoesController.cs" />
     <Compile Include="Controllers\TpTransacaosController.cs" />
+    <Compile Include="Data\CategoriaDb.cs" />
+    <Compile Include="Data\KitDb.cs" />
+    <Compile Include="Data\ProdutoDb.cs" />
     <Compile Include="Db\KitContext.cs" />
     <Compile Include="Db\KitInitializer.cs" />
     <Compile Include="Global.asax.cs">
@@ -146,6 +149,7 @@
     <Compile Include="Models\Transacao.cs" />
     <Compile Include="Models\TransProd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Enums.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

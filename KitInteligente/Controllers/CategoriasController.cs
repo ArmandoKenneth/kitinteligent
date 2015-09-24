@@ -8,17 +8,19 @@ using System.Web;
 using System.Web.Mvc;
 using KitInteligente.Db;
 using KitInteligente.Models;
+using KitInteligente.Data;
 
 namespace KitInteligente.Controllers
 {
     public class CategoriasController : Controller
     {
-        private KitContext db = new KitContext();
+
+        private CategoriaDb categoriaDb = new CategoriaDb();
 
         // GET: Categorias
         public ActionResult Index()
         {
-            return View(db.Categorias.ToList());
+            return View(categoriaDb.obterTodasCategorias());
         }
 
         // GET: Categorias/Details/5
@@ -28,7 +30,7 @@ namespace KitInteligente.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Categoria categoria = db.Categorias.Find(id);
+            Categoria categoria = categoriaDb.obterCategoria(id);
             if (categoria == null)
             {
                 return HttpNotFound();
@@ -51,8 +53,7 @@ namespace KitInteligente.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Categorias.Add(categoria);
-                db.SaveChanges();
+                categoriaDb.salvarCategoria(categoria);
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +67,7 @@ namespace KitInteligente.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Categoria categoria = db.Categorias.Find(id);
+            Categoria categoria = categoriaDb.obterCategoria(id);
             if (categoria == null)
             {
                 return HttpNotFound();
@@ -83,8 +84,7 @@ namespace KitInteligente.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(categoria).State = EntityState.Modified;
-                db.SaveChanges();
+                categoriaDb.editarCategoria(categoria);
                 return RedirectToAction("Index");
             }
             return View(categoria);
@@ -97,7 +97,13 @@ namespace KitInteligente.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Categoria categoria = db.Categorias.Find(id);
+            Categoria categoria = categoriaDb.obterCategoria(id);
+            categoria.PermitirExclusao = true;
+            if (categoria.Produtos != null && categoria.Produtos.Count > 0)
+            {
+                categoria.PermitirExclusao = false;
+            }
+            ViewBag.permitirExclusao = categoria.PermitirExclusao;
             if (categoria == null)
             {
                 return HttpNotFound();
@@ -108,11 +114,12 @@ namespace KitInteligente.Controllers
         // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, bool permitirExclusao)
         {
-            Categoria categoria = db.Categorias.Find(id);
-            db.Categorias.Remove(categoria);
-            db.SaveChanges();
+            if (permitirExclusao)
+            {
+                categoriaDb.removerCategoria(id);
+            }
             return RedirectToAction("Index");
         }
 
@@ -120,7 +127,7 @@ namespace KitInteligente.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                categoriaDb.dispose();
             }
             base.Dispose(disposing);
         }

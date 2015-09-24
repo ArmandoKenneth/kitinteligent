@@ -12,9 +12,9 @@ namespace KitInteligente.Models
         public int Periodo { get; set; }
 
         // Foreign keys
-        public int CalcEstoqueSeg { get; set; }
+        public int CalcEstoqueSegID { get; set; }
 
         // Virtual objects
-
+        public virtual CalcEstoqueSeg CalcEstoqueSeg { get; set; }
     }
 }

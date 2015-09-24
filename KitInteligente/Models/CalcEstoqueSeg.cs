@@ -18,11 +18,23 @@ namespace KitInteligente.Models
 
         // Foreign keys
         //public int ProdutoID { get; set; }
-        public int DemandaID { get; set; }
+        //public int DemandaID { get; set; }
         public int NivelServicoID { get; set; }
 
         // Virtual object
-        public virtual Demanda Demanda { get; set; }
+        public virtual ICollection<Demanda> Demandas { get; set; }
         public virtual NivelServico NivelServico { get; set; }
+
+        public CalcEstoqueSeg()
+        {
+            this.NivelServicoID = (int)Utils.NivelServico.NV50;
+            this.DemTotal = 0;
+            this.DemMedia = 0;
+            this.DesvioPadrao = 0;
+            this.LeadTime = 0;
+            this.EstoqueSeg = 0;
+            this.PontoRessuprimento = 0;
+            this.EstoqueMaximo = 0;
+        }
     }
 }

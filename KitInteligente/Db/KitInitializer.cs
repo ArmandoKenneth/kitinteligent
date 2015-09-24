@@ -19,7 +19,7 @@ namespace KitInteligente.Db
                 new Categoria {CategoriaID = 3, Descricao = "Frutas" },
                 new Categoria {CategoriaID = 4, Descricao = "Verduras" },
                 new Categoria {CategoriaID = 5, Descricao = "Carne" },
-                new Categoria {CategoriaID = 6,Descricao = "Alimento" }
+                new Categoria {CategoriaID = 6, Descricao = "Alimento" }
             };
 
             categorias.ForEach(c => context.Categorias.Add(c));

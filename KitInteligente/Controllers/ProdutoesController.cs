@@ -8,18 +8,20 @@ using System.Web;
 using System.Web.Mvc;
 using KitInteligente.Db;
 using KitInteligente.Models;
+using KitInteligente.Data;
 
 namespace KitInteligente.Controllers
 {
     public class ProdutoesController : Controller
     {
-        private KitContext db = new KitContext();
+        private ProdutoDb produtoDb = new ProdutoDb();
+        private CategoriaDb categoriaDb = new CategoriaDb();
 
         // GET: Produtoes
         public ActionResult Index()
         {
-            var produtos = db.Produtos.Include(p => p.CalcEstoqueSeg).Include(p => p.Categoria);
-            return View(produtos.ToList());
+            var produtos = produtoDb.obterTodosProdutos();
+            return View(produtos);
         }
 
         // GET: Produtoes/Details/5
@@ -29,7 +31,7 @@ namespace KitInteligente.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Produto produto = db.Produtos.Find(id);
+            Produto produto = produtoDb.obterProduto(id);
             if (produto == null)
             {
                 return HttpNotFound();
@@ -40,21 +42,10 @@ namespace KitInteligente.Controllers
         // GET: Produtoes/Create
         public ActionResult Create()
         {
-            ViewBag.CalcEstoqueSegID = new SelectList(db.CalcEstoqueSegs, "CalcEstoqueSegID", "CalcEstoqueSegID");
-            ViewBag.CategoriaID = new SelectList(db.Categorias, "CategoriaID", "Descricao");
-            int codProduto;
-            if (db.Produtos.Count() > 0)
-            {
-                codProduto = db.Produtos.Last().Codigo + 1;
-            }
-            else
-            {
-                codProduto = 1;
-            }
-            ViewBag.codProduto = codProduto;
-
+            ViewBag.CalcEstoqueSegID = new SelectList(produtoDb.obterCalcEstoqueSegs(), "CalcEstoqueSegID", "CalcEstoqueSegID");
+            ViewBag.CategoriaID = new SelectList(categoriaDb.obterTodasCategorias(), "CategoriaID", "Descricao");
             Produto model = new Produto();
-            model.Codigo = codProduto;
+            model.Codigo = produtoDb.obterUltimoCodigo() + 1;
             return View(model);
         }
 
@@ -67,20 +58,13 @@ namespace KitInteligente.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Produtos.Add(produto);
-                db.SaveChanges();
+                
+                produtoDb.salvarProduto(produto);
                 return RedirectToAction("Index");
-
-                // Criar calc_estoque_seg
-
-                // Criar uma transacap de entrada
-
-                
-                
             }
 
-            ViewBag.CalcEstoqueSegID = new SelectList(db.CalcEstoqueSegs, "CalcEstoqueSegID", "CalcEstoqueSegID", produto.CalcEstoqueSegID);
-            ViewBag.CategoriaID = new SelectList(db.Categorias, "CategoriaID", "Descricao", produto.CategoriaID);
+            ViewBag.CalcEstoqueSegID = new SelectList(produtoDb.obterCalcEstoqueSegs(), "CalcEstoqueSegID", "CalcEstoqueSegID", produto.CalcEstoqueSegID);
+            ViewBag.CategoriaID = new SelectList(categoriaDb.obterTodasCategorias(), "CategoriaID", "Descricao", produto.CategoriaID);
             return View(produto);
         }
 
@@ -91,13 +75,13 @@ namespace KitInteligente.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Produto produto = db.Produtos.Find(id);
+            Produto produto = produtoDb.obterProduto(id);
             if (produto == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CalcEstoqueSegID = new SelectList(db.CalcEstoqueSegs, "CalcEstoqueSegID", "CalcEstoqueSegID", produto.CalcEstoqueSegID);
-            ViewBag.CategoriaID = new SelectList(db.Categorias, "CategoriaID", "Descricao", produto.CategoriaID);
+            ViewBag.CalcEstoqueSegID = new SelectList(produtoDb.obterCalcEstoqueSegs(), "CalcEstoqueSegID", "CalcEstoqueSegID", produto.CalcEstoqueSegID);
+            ViewBag.CategoriaID = new SelectList(categoriaDb.obterTodasCategorias(), "CategoriaID", "Descricao", produto.CategoriaID);
             return View(produto);
         }
 
@@ -110,12 +94,11 @@ namespace KitInteligente.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(produto).State = EntityState.Modified;
-                db.SaveChanges();
+                produtoDb.editarProduto(produto);
                 return RedirectToAction("Index");
             }
-            ViewBag.CalcEstoqueSegID = new SelectList(db.CalcEstoqueSegs, "CalcEstoqueSegID", "CalcEstoqueSegID", produto.CalcEstoqueSegID);
-            ViewBag.CategoriaID = new SelectList(db.Categorias, "CategoriaID", "Descricao", produto.CategoriaID);
+            ViewBag.CalcEstoqueSegID = new SelectList(produtoDb.obterCalcEstoqueSegs(), "CalcEstoqueSegID", "CalcEstoqueSegID", produto.CalcEstoqueSegID);
+            ViewBag.CategoriaID = new SelectList(categoriaDb.obterTodasCategorias(), "CategoriaID", "Descricao", produto.CategoriaID);
             return View(produto);
         }
 
@@ -126,7 +109,7 @@ namespace KitInteligente.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Produto produto = db.Produtos.Find(id);
+            Produto produto = produtoDb.obterProduto(id);
             if (produto == null)
             {
                 return HttpNotFound();
@@ -139,9 +122,7 @@ namespace KitInteligente.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Produto produto = db.Produtos.Find(id);
-            db.Produtos.Remove(produto);
-            db.SaveChanges();
+            produtoDb.removerProduto(id);
             return RedirectToAction("Index");
         }
 
@@ -149,7 +130,7 @@ namespace KitInteligente.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                produtoDb.dispose();
             }
             base.Dispose(disposing);
         }

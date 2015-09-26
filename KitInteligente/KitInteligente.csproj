@@ -136,12 +136,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CalculoEstoqueSegurancaController.cs" />
     <Compile Include="Controllers\CategoriasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProdutoesController.cs" />
     <Compile Include="Controllers\TpTransacaosController.cs" />
+    <Compile Include="Data\CalcEstoqueSegDb.cs" />
     <Compile Include="Data\CategoriaDb.cs" />
+    <Compile Include="Data\DemandaDb.cs" />
     <Compile Include="Data\KitDb.cs" />
+    <Compile Include="Data\NivelServicoDb.cs" />
     <Compile Include="Data\ProdutoDb.cs" />
     <Compile Include="Db\KitContext.cs" />
     <Compile Include="Db\KitInitializer.cs" />
@@ -149,8 +153,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CalcEstoqueSeg.cs" />
+    <Compile Include="Models\CalculoEstoque.cs" />
     <Compile Include="Models\Categoria.cs" />
     <Compile Include="Models\Demanda.cs" />
+    <Compile Include="Models\JsonCalculo.cs" />
     <Compile Include="Models\NivelServico.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\TpTransacao.cs" />
@@ -181,7 +187,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -209,6 +217,8 @@
     <Content Include="Views\Produtoes\Edit.cshtml" />
     <Content Include="Views\Produtoes\Index.cshtml" />
     <Content Include="Views\Categorias\_ConfirmarExclusao.cshtml" />
+    <Content Include="Views\Produtoes\_ConfirmarExclusao.cshtml" />
+    <Content Include="Views\CalculoEstoqueSeguranca\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

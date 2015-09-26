@@ -1,12 +1,59 @@
 ﻿@model PagedList.IPagedList<KitInteligente.Models.Produto>
 @using PagedList.Mvc;
 
+<script>
+    function deletar() {
+        $("#idSelec").val(idSelecionado);
+        $("#formularioPost").submit();
+    }
+
+    var idSelecionado;
+    function confirmarExclusao(id) {
+        idSelecionado = id;
+        var serviceURL = '/Produtoes/VerificarStatus/?idSelecionado='+idSelecionado;
+
+        $.ajax({
+            type: "GET",
+            url: serviceURL,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            if (data == false) {
+                $("#msg").text("Nao e possivel excluir o produto selecionada, pois existem transacoes associadas a ele.");
+                $("#confirmarExclusao").prop('disabled', true);
+            } else {
+                $("#msg").text("Deseja confirmar a exclusao do produto selecionado?");
+                $("#confirmarExclusao").prop('disabled', false);
+            }
+
+        }
+
+        function errorFunc() {
+            alert('error');
+        }
+
+        $('#modalConfirmacao').modal('show');
+    }
+
+</script>
+
+
 
 @{
     ViewBag.Title = "Produtos";
 }
 
 <h2>Produtos</h2>
+
+@using (Html.BeginForm("Delete", "Produtoes", FormMethod.Post, new { id = "formularioPost" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="idSelec" />
+}
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -49,7 +96,7 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ProdutoID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ProdutoID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ProdutoID })
+                <a href="javascript:confirmarExclusao(@item.ProdutoID)">Remover</a>
             </td>
         </tr>
     }
@@ -58,3 +105,7 @@
 
 <br /> Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 @Html.PagedListPager(Model, pagina => Url.Action("Index", new { pagina, filtroAtual = ViewBag.FiltroAtual }))
+
+@{
+    Html.RenderPartial("_ConfirmarExclusao");
+}

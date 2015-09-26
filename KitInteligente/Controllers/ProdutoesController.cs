@@ -146,8 +146,34 @@ namespace KitInteligente.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            produtoDb.removerProduto(id);
+            if (permitirExclusao(id))
+            {
+                produtoDb.removerProduto(id);
+            }
             return RedirectToAction("Index");
+        }
+
+        private bool permitirExclusao(int id)
+        {
+            Produto p = produtoDb.obterProduto(id);
+            if (p != null && p.TransProds != null && p.TransProds.Count > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public ActionResult VerificarStatus(int idSelecionado)
+        {
+            try
+            {
+                return Json(this.permitirExclusao(idSelecionado), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         protected override void Dispose(bool disposing)

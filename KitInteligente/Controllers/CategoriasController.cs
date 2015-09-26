@@ -149,9 +149,16 @@ namespace KitInteligente.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult ConfirmarExclusao()
+        public ActionResult VerificarStatus(int idSelecionado)
         {
-            return PartialView();
+            try
+            {
+                return Json(this.permitirExclusao(idSelecionado), JsonRequestBehavior.AllowGet);
+            }catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
         }
     }
 }

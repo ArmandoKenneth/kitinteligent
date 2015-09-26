@@ -1,0 +1,197 @@
+﻿@model KitInteligente.Models.CalculoEstoque
+
+@{
+    ViewBag.Title = "Cálculo de Estoque de Segurança (Estoque Mínimo)";
+}
+
+<script type="text/javascript">
+    var idSelecionado = 1;
+
+    function mudancaNv(id){
+        idSelecionado = id;
+        $(this).toggleClass("clicked");
+        return false;
+    }
+
+    function calcular() {
+        var obj = new Object();
+        var soma = 0;
+        obj.PeriodoSelecionado = $('#Produto_CalcEstoqueSeg_PeriodoSelecionado').val();
+        obj.Demandas = new Array();
+        for (var i = 1; i < 11; i++) {
+            var d = parseInt($('#demanda_Valor_'+i).val());
+            obj.Demandas.push(d);
+            //if (i <= obj.PeriodoSelecionado){   
+                soma += d;
+            //}
+            
+        }
+        obj.Media = soma / 10;
+        obj.Total = soma;
+        $('#dem-total').text(obj.Total);
+        $('#dem-media').text(obj.Media);
+
+        obj.LeadTime = $('#Produto_CalcEstoqueSeg_LeadTime').val();
+        
+        obj.NivelServicoID = idSelecionado;
+
+        $.ajax({
+            url: '@Url.Action("Calcular", "CalculoEstoqueSeguranca")',
+            type: "POST",
+            cache: false,
+            data: JSON.stringify({ obj : obj }),
+            contentType: "application/json; charset=utf-8",
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            $('#Produto_CalcEstoqueSeg_DesvioPadrao').val(data.DesvioPadrao);
+            $('#Produto_CalcEstoqueSeg_EstoqueSeg').val(data.EstoqueSeguro);
+            $('#Produto_CalcEstoqueSeg_PontoRessuprimento').val(data.PontoRessuprimento);
+            $('#Produto_CalcEstoqueSeg_EstoqueMaximo').val(data.EstoqueMaximo);
+            //alert("foi");
+        }
+
+        function errorFunc() {
+            alert('error');
+        }
+
+    }
+
+</script>
+
+<h2>Cálculo de Estoque de Segurança (Estoque Mínimo)</h2>
+
+<table id="tbl-demandas" class="table">
+    <thead>
+        <tr class="col-md-12"><th><h3>Demandas</h3></th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Periodo</th>
+            @foreach (var demanda in Model.Produto.CalcEstoqueSeg.Demandas)
+            {
+                <th>@demanda.Periodo</th>
+            }
+            <th>Total</th>
+            <th>Media</th>
+        </tr>
+        <tr>
+            <th>Demanda</th>
+            @foreach (var demanda in Model.Produto.CalcEstoqueSeg.Demandas)
+            {
+                <td>@Html.EditorFor(d => demanda.Valor, new { htmlAttributes = new { @id="demanda_Valor_"+demanda.Periodo, @class = "form-control selec" } })</td>
+            }
+            <th> <div id="dem-total">@Html.DisplayFor(m => Model.Produto.CalcEstoqueSeg.DemTotal)</div></th>
+            <th><div id="dem-media">@Html.DisplayFor(m => Model.Produto.CalcEstoqueSeg.DemMedia)</div></th>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Calculos</h3>
+<br/>
+<div class="container">
+    <div class="row">
+        <div id="calculos" class="col-sm-4 col-md-4 col-lg-4 col-sm-4 col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row opcao">
+                        <div class="col-md-6 ">@Html.LabelFor(m => Model.Produto.CalcEstoqueSeg.DesvioPadrao)</div>
+                        <div class="col-md-6">@Html.EditorFor(m => Model.Produto.CalcEstoqueSeg.DesvioPadrao, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                    </div>
+                    <div class="row opcao">
+                        <div class="col-md-6">@Html.LabelFor(m => Model.Produto.CalcEstoqueSeg.LeadTime)</div>
+                        <div class="col-md-6">@Html.EditorFor(m => Model.Produto.CalcEstoqueSeg.LeadTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                    </div>
+                    <div class="row opcao">
+                        <div class="col-md-6">@Html.LabelFor(m => Model.Produto.CalcEstoqueSeg.PeriodoSelecionado)</div>
+                        <div class="col-md-6">@Html.EditorFor(m => Model.Produto.CalcEstoqueSeg.PeriodoSelecionado, new { htmlAttributes = new { @class = "form-control" } })</div>
+                    </div>
+                </div>
+            </div>
+             <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row opcao">
+                        <div class="col-md-6">@Html.LabelFor(m => Model.Produto.CalcEstoqueSeg.EstoqueSeg)</div>
+                        <div class="col-md-6">@Html.EditorFor(m => Model.Produto.CalcEstoqueSeg.EstoqueSeg, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                    </div>
+                    <div class="row opcao">
+                        <div class="col-md-6">@Html.LabelFor(m => Model.Produto.CalcEstoqueSeg.PontoRessuprimento)</div>
+                        <div class="col-md-6">@Html.EditorFor(m => Model.Produto.CalcEstoqueSeg.PontoRessuprimento, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                    </div>
+                    <div class="row opcao">
+                        <div class="col-md-6">@Html.LabelFor(m => Model.Produto.CalcEstoqueSeg.EstoqueMaximo)</div>
+                        <div class="col-md-6">@Html.EditorFor(m => Model.Produto.CalcEstoqueSeg.EstoqueMaximo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                    </div>
+                </div>
+             </div>
+
+        </div>  
+
+        <div id="niveis" class="col-sm-4 col-md-4 col-lg-4 col-sm-4 col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row nv">
+                        <table id="tbl-nv" class="table tabnv">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(m => Model.Produto.CalcEstoqueSeg.NivelServicoID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => Model.Produto.CalcEstoqueSeg.NivelServico.Fator)
+                                </th>
+                            </tr>
+                            @foreach (var nivel in Model.NiveisServico)
+                            {
+                                <tr onclick="mudancaNv(@nivel.NivelServicoID)">
+                                    <td  id="nv-@nivel.NivelServicoID" class="valor-nv">
+                                        @{
+                                            if (nivel.Nivel == 99.9)
+                                            {
+                                                @nivel.Nivel.ToString("0.00")
+                                            }
+                                            else
+                                            {
+                                                @nivel.Nivel
+                                            }
+                                        }
+                                        %
+                                    </td>
+                                    <td  id="fator-@nivel.NivelServicoID" >@nivel.Fator.ToString("0.0000")</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="produto" class="col-sm-4 col-md-4 col-lg-4 col-sm-4 col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Produto</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row prod">
+                        <div>
+                            <label>Descricao: </label> @Model.Produto.Descricao
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-2">
+                        <button type="button" id="btn-calcular" class="btn btn-primary" onclick="calcular();">Calcular</button>
+                    </div>
+                    <div class="col-md-2 col-md-offset-1"><button type="button" id="btn-aplicar" class="btn btn-primary">Aplicar</button></div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+    
+</div>

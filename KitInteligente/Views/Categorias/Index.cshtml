@@ -6,7 +6,6 @@
 
 <h2>Index</h2>
 <script>
-
     function deletar() {
         $("#idSelec").val(idSelecionado);
         $("#formularioPost").submit();
@@ -15,6 +14,32 @@
     var idSelecionado;
     function confirmarExclusao(id) {
         idSelecionado = id;
+        var serviceURL = '/Categorias/VerificarStatus/?idSelecionado='+idSelecionado;
+
+        $.ajax({
+            type: "GET",
+            url: serviceURL,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            if (data == false) {
+                $("#msg").text("Nao e possivel excluir a categoria selecionada, pois existem produtos associados a ela.");
+                $("#confirmarExclusao").prop('disabled', true);
+            } else {
+                $("#msg").text("Deseja confirmar a exclusao da categoria selecionada?");
+                $("#confirmarExclusao").prop('disabled', false);
+            }
+            
+        }
+
+        function errorFunc() {
+            alert('error');
+        }
+
         $('#modalConfirmacao').modal('show');
     }
 

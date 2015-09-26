@@ -15,6 +15,7 @@ namespace KitInteligente.Models
         public double EstoqueSeg { get; set; }
         public int PontoRessuprimento { get; set; }
         public int EstoqueMaximo { get; set; }
+        public int PeriodoSelecionado;
 
         // Foreign keys
         //public int ProdutoID { get; set; }
@@ -35,6 +36,7 @@ namespace KitInteligente.Models
             this.EstoqueSeg = 0;
             this.PontoRessuprimento = 0;
             this.EstoqueMaximo = 0;
+            this.PeriodoSelecionado = 0;
         }
     }
 }

@@ -1,0 +1,183 @@
+﻿@model PagedList.IPagedList<KitInteligente.Models.Transacao>
+@using PagedList.Mvc;
+
+<script>
+    var idSelecionado;
+
+    function successFunc(data, status) {
+        $('#cont').html(data);
+        bindPager('#myPager');
+        bindColor();
+        //$("#modalProduto").modal('show');
+    }
+
+    function bindPager(pagerId) {
+        $(pagerId).on('click', 'a', function () {
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: false,
+                success: successFunc
+            });
+            return false;
+        });
+    }
+
+    function bindColor() {
+        $('tr').click(function () {
+            if (this.id != "titulo") {
+                $("table tr").css("background", "white");
+                if (this.style.background == "" || this.style.backgroundColor == "white") {
+                    $(this).css('background', 'blue');
+                }
+                else {
+                    $(this).css('background', 'white');
+                }
+            }
+        });
+    }
+
+    function carregarModal() {
+        var url = "@Url.Action("_PesquisaProduto", "Entrada")";
+        $.ajax(url)
+            .done(function (response) {
+                $("#cont").html(response);
+                $("#modalProduto").modal('show');
+
+                bindPager('#myPager');
+
+                bindColor();
+            });
+    }
+
+    function selecionarItem(id) {
+        idSelecionado = id;
+        $("#modalProduto").modal('hide');
+        var url = "@Url.Action("_NovaTransacao", "Entrada")/?id="+idSelecionado;
+        $.ajax(url)
+            .done(function (response) {
+                $("#partial-trans").html(response);
+            });
+
+    }
+
+    var produtoSelecionado;
+
+    function detalhes(id) {
+        produtoSelecionado = id;
+        var url = "@Url.Action("_DetalhesProduto", "Entrada")/?id="+produtoSelecionado;
+        $.ajax(url)
+            .done(function (response) {
+                $("#det-produto").html(response);
+                $("#modal-det-Produto").modal('show');
+            });
+    }
+
+</script>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div id="det-produto"></div>
+
+<div class="modal fade" id="modalProduto" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pesquisar produto</h4>
+            </div>
+            <div class="modal-body" id="preview">
+                <div id="cont"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br/>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-5">Transacao</div>
+                        <div class="col-md-offset-1 col-md-3"><button class="btn btn-primary" onclick="carregarModal();">Nova</button></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                @using (Ajax.BeginForm("Create", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccessAjax", OnFailure = "OnFailureAjax" }))
+                {
+                    <div id="partial-trans"></div>
+
+                }
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-8">
+            <div id="formPesquisa">
+                @using (Html.BeginForm("Index", "Entrada", FormMethod.Get))
+                {
+                    <div class="row">
+                        <div class="col-md-1">Data</div>
+                        <div class="col-md-3">@Html.TextBox("DataInicial" as string)</div>
+                        <div class="col-md-1">ate</div>
+                        <div class="col-md-3">@Html.TextBox("DataFinal" as string)</div>
+                        <div class="col-md-3"><input type="submit" class="btn" value="Pesquisar" /></div>
+                    </div>
+                }
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Ultimas transacoes</td>
+                    </tr>
+                </thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().TransProd.Produto.Descricao)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().QtdTransacao)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().CustoUn)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().Horario)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransProd.Produto.Descricao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.QtdTransacao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustoUn)
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Horario)
+                        </td>
+                        <td>
+                            <a href="javascript:detalhes(@item.TransProd.ProdutoID)">Detalhes</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            <br /> Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, pagina => Url.Action("Index", new { pagina, filtroAtual = ViewBag.FiltroAtual }))
+        </div>
+    </div>
+</div>
+
+
+

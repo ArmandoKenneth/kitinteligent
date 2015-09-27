@@ -138,6 +138,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CalculoEstoqueSegurancaController.cs" />
     <Compile Include="Controllers\CategoriasController.cs" />
+    <Compile Include="Controllers\EntradaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProdutoesController.cs" />
     <Compile Include="Controllers\TpTransacaosController.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Data\KitDb.cs" />
     <Compile Include="Data\NivelServicoDb.cs" />
     <Compile Include="Data\ProdutoDb.cs" />
+    <Compile Include="Data\TransacaoDb.cs" />
     <Compile Include="Db\KitContext.cs" />
     <Compile Include="Db\KitInitializer.cs" />
     <Compile Include="Global.asax.cs">
@@ -164,6 +166,7 @@
     <Compile Include="Models\TransProd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Enums.cs" />
+    <Compile Include="ViewModel\TransacaoEntrada.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -219,6 +222,12 @@
     <Content Include="Views\Categorias\_ConfirmarExclusao.cshtml" />
     <Content Include="Views\Produtoes\_ConfirmarExclusao.cshtml" />
     <Content Include="Views\CalculoEstoqueSeguranca\Index.cshtml" />
+    <Content Include="Views\Entrada\Create.cshtml" />
+    <Content Include="Views\Entrada\Details.cshtml" />
+    <Content Include="Views\Entrada\Index.cshtml" />
+    <Content Include="Views\Entrada\_PesquisaProduto.cshtml" />
+    <Content Include="Views\Entrada\_NovaTransacao.cshtml" />
+    <Content Include="Views\Entrada\_DetalhesProduto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

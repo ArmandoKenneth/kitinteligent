@@ -1,0 +1,32 @@
+﻿@model KitInteligente.Models.Produto
+
+
+
+<div class="modal fade" id="modal-det-Produto" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Detalhes do produto</h4>
+            </div>
+            <div class="modal-body" id="preview">
+                <div id="cont-prod">
+                    <div class="row">
+                        <div class="col-md-4">@Html.LabelFor(model => model.Codigo)</div>
+                        <div class="col-md-8">@Html.DisplayFor(model => model.Codigo)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">@Html.LabelFor(model => model.Descricao)</div>
+                        <div class="col-md-8">@Html.DisplayFor(model => model.Descricao)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">@Html.LabelFor(model => model.estoqueTotal)</div>
+                        <div class="col-md-8">@Html.DisplayFor(model => model.estoqueTotal)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

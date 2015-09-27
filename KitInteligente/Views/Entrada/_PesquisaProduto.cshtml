@@ -1,0 +1,51 @@
+﻿@model PagedList.IPagedList<KitInteligente.Models.Produto>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Pesquisa de produtos";
+}
+
+
+@using (Html.BeginForm("_PesquisaProduto", "Entrada", FormMethod.Get))
+{
+    <p> Pesquisa: @Html.TextBox("StringPesquisa", ViewBag.FiltroAtual as string) <input type="submit" value="Pesquisar" /></p>
+}
+                
+<table class="table">
+    <tr id="titulo">
+
+        <th>
+            @Html.DisplayNameFor(model => model.First().Codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Descricao)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.First().Categoria.Descricao)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr ondblclick="selecionarItem(@item.ProdutoID);">
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.Descricao)
+            </td>
+        </tr>
+    }
+
+</table>
+
+<br /> 
+<div id="myPager">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, pagina => Url.Action("_PesquisaProduto", new { pagina, filtroAtual = ViewBag.FiltroAtual }))
+</div> 
+            

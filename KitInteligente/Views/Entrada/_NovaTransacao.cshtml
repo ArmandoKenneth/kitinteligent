@@ -1,0 +1,67 @@
+﻿@model KitInteligente.ViewModel.TransacaoEntrada
+
+
+
+
+@Html.AntiForgeryToken()
+@Html.HiddenFor(model => model.ProdutoID)
+
+
+<div class="wrapper">
+
+        
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">@Html.LabelFor(model => model.Produto.Codigo)</div>
+                    <div class="col-md-6">@Html.DisplayFor(model => model.Produto.Codigo)</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">@Html.LabelFor(model => model.Produto.Descricao)</div>
+                    <div class="col-md-6">@Html.DisplayFor(model => model.Produto.Descricao)</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">@Html.LabelFor(model => model.Produto.estoqueTotal)</div>
+                    <div class="col-md-6">@Html.DisplayFor(model => model.Produto.estoqueTotal)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formTrans">
+        <div class="form-group">
+            <div class="col-md-5">
+                @Html.LabelFor(model => model.Qtd, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Qtd, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-5">
+                @Html.LabelFor(model => model.Custo, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Custo, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-5">
+                @Html.LabelFor(model => model.DataEntrada, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.DataEntrada, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Adicionar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+ 
+</div>

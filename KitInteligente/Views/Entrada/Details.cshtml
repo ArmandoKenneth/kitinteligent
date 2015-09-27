@@ -1,0 +1,66 @@
+﻿@model KitInteligente.Models.Transacao
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Transacao</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TpTransacao.Descricao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TpTransacao.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QtdTransacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QtdTransacao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustoUn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustoUn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustoTotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustoTotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Horario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Horario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransPodID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransPodID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TransacaoID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
